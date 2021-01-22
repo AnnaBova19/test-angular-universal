@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SongService } from '../../shared/song.service';
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit-song',
@@ -12,12 +13,15 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class EditSongComponent implements OnInit {
   updateSongForm!: FormGroup;
   songUpdated: boolean = false;
+  title: string = 'Update Song - Angular Universal CRUD App';
 
   constructor(
     private songService: SongService,
     private actRoute: ActivatedRoute,
     private router: Router,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private titleService: Title,
+    private metaTagService: Meta
   ) { }
 
   ngOnInit() {
@@ -25,8 +29,12 @@ export class EditSongComponent implements OnInit {
     this.updateSongForm = this.fb.group({
       name: [''],
       artist: ['']
-    })
-    this.showSong(id)
+    });
+    this.showSong(id);
+    this.titleService.setTitle(this.title);
+    this.metaTagService.updateTag(
+      { name: 'description', content: 'Update song template' }
+    );
   }
 
   showSong(id) {
